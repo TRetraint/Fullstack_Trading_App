@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1><a href="/">Stock </a>
+        <i class="angle double right icon"></i>
+        {{ stock[2] }}
+        ({{ stock[1] }})
+    </h1>
+    <table class="ui inverted table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for price in prices %}
+            <tr>
+                <td>{{ price[2] }}</td>
+                <td>{{ price[3] }}</td>
+                <td>{{ price[4] }}</td>
+                <td>{{ price[5] }}</td>
+                <td>{{ price[6] }}</td>
+                <td>{{ price[7] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}
+
