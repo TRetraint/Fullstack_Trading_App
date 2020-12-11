@@ -2,8 +2,8 @@ import sqlite3, config
 from fastapi import FastAPI, Request, Form
 from fastapi.templating  import Jinja2Templates
 from fastapi.responses import RedirectResponse
-
 from datetime import date
+
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
@@ -13,6 +13,7 @@ def index(request: Request):
     connection = sqlite3.connect(config.DB_PATH)
     cursor = connection.cursor()
     connection.row_factory = sqlite3.Row
+    
     if stock_filter == 'new_closing_highs':
         cursor.execute("""SELECT * FROM (
             SELECT symbol, name, stock_id, max(close), date
@@ -20,6 +21,15 @@ def index(request: Request):
             GROUP BY stock_id
             ORDER BY symbol)
             WHERE date = ?""", (date.today().isoformat(),))
+
+    elif stock_filter == 'new_closing_lows':
+        cursor.execute("""SELECT * FROM (
+            SELECT symbol, name, stock_id, min(close), date
+            FROM stock_price JOIN stock ON stock.id = stock_price.stock_id
+            GROUP BY stock_id
+            ORDER BY symbol)
+            WHERE date = ?""", (date.today().isoformat(),))
+
     else:
         cursor.execute("""SELECT symbol, name FROM stock ORDER BY symbol""")
     rows = cursor.fetchall()
