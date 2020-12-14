@@ -3,17 +3,16 @@ import config
 import alpaca_trade_api as tradeapi
 from  datetime import date,timedelta
 import yfinance as yf
-import smtplib, ssl
-
+import email_notif
 
 
 current_date = date.today() + timedelta(days=-1)
 api = tradeapi.REST(config.API_KEY, config.SECRET_KEY, base_url=config.URL)
-orders = api.list_orders(status='all', after=f"{current_date + timedelta(days=-1)}")
+orders = api.list_orders(status='open', after=f"{current_date + timedelta(days=-1)}")
 
 connection = sqlite3.connect(config.DB_PATH)
 connection.row_factory = sqlite3.Row
-
+messages = []
 cursor = connection.cursor()
 
 cursor.execute("""
@@ -40,7 +39,7 @@ start_minute_bar = f"{current_date} 09:35:00-05:00"
 end_minute_bar = f"{current_date} 09:50:00-05:00"
 
 for symbol in symbols:
-    minute_bars = yf.download(symbol, start=current_date, end=current_date+ timedelta(days=1), interval = "1m")
+    minute_bars = yf.download(symbol, start=current_date, end=current_date + timedelta(days=1), interval = "1m")
     opening_range_mask = (minute_bars.index >= start_minute_bar) & (minute_bars.index < end_minute_bar)
     opening_range_bars = minute_bars.loc[opening_range_mask]
 
@@ -56,8 +55,9 @@ for symbol in symbols:
     if not after_opening_range_breakout.empty:
         if symbol not in existing_order_symbols:
             limit_price = after_opening_range_breakout.iloc[0]['Close']
-            print(f"placing order for {symbol} at {limit_price}, closed above {opening_range_high} at {after_opening_range_breakout.iloc[0]}")
-
+            print(f"placing order for {symbol} at {limit_price}, closed above {opening_range_high}\n\n{after_opening_range_breakout.iloc[0]}\n\n")
+            messages.append(f"placing order for {symbol} at {limit_price}, closed above {opening_range_high}\n\n{after_opening_range_breakout.iloc[0]}\n\n")
+            """
             api.submit_order(
                 symbol=symbol,
                 side='buy',
@@ -69,7 +69,13 @@ for symbol in symbols:
                 take_profit=dict(limit_price = limit_price + opening_range),
                 stop_loss=dict(stop_price = limit_price - opening_range)
             )
+        """
+
         else:
             print(f"Error : Already an order for {symbol}")
 
-    
+print(messages)
+strategy = "Opening Range Breakout"
+email_notif.send_email(f"Trade Notifications for {current_date}",messages, strategy)
+
+
