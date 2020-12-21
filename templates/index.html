@@ -23,6 +23,10 @@
               <tr>
                 <th>Symbol</th>
                 <th>Name</th>
+                <th>Price</th>
+                <th>RSI 14</th>
+                <th>SMA 20</th>
+                <th>SMA 50</th>
               </tr>
             </thead>
             <tbody>
@@ -30,6 +34,7 @@
                 <tr>
                     <td>{{ stock[0] }}</td>
                     <td><a href="/stock/{{ stock[0] }}">{{ stock[1] }}</td>
+                    <td>{{ indicators[stock[0]]}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
