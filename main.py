@@ -33,7 +33,16 @@ def index(request: Request):
     else:
         cursor.execute("""SELECT symbol, name FROM stock ORDER BY symbol""")
     rows = cursor.fetchall()
-    return templates.TemplateResponse("index.html", {"request": request, "stocks": rows})
+
+    cursor.execute("""SELECT symbol, rsi_14, sma_20, sma_50, close
+    FROM stock join stock_price on stock_price.stock_id = stock.id
+    WHERE date IN (SELECT max(date) FROM stock_price)""")
+    
+    indicator_rows = cursor.fetchall()
+    indicator_values = {}
+    for row in indicator_rows:
+        indicator_values[row[0]] = row
+    return templates.TemplateResponse("index.html", {"request": request, "stocks": rows, "indicators": indicator_values})
 
 
 @app.get("/stock/{symbol}")

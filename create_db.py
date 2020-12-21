@@ -6,22 +6,25 @@ cursor = connection.cursor()
 
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS stock (
-        id INTEGER PRIMARY KEY, 
-        symbol TEXT NOT NULL UNIQUE, 
+        id INTEGER PRIMARY KEY,
+        symbol TEXT NOT NULL UNIQUE,
         name TEXT NOT NULL,
         exchange TEXT NOT NULL
     )
 """)
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS stock_price (
-        id INTEGER PRIMARY KEY, 
+        id INTEGER PRIMARY KEY,
         stock_id INTEGER,
         date NOT NULL,
-        open NOT NULL, 
-        high NOT NULL, 
-        low NOT NULL, 
-        close NOT NULL, 
+        open NOT NULL,
+        high NOT NULL,
+        low NOT NULL,
+        close NOT NULL,
         volume NOT NULL,
+        sma_20,
+        sma_50,
+        rsi_14,
         FOREIGN KEY (stock_id) REFERENCES stock (id)
     )
 """)
@@ -45,7 +48,7 @@ cursor.execute("""
 strategies = ['opening_range_breakout', 'opening_range_breakdown']
 
 for strat in strategies:
-    cursor.execute(""" 
+    cursor.execute("""
         INSERT INTO strategy (name) VALUES (?)
     """, (strat,))
 
