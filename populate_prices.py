@@ -31,8 +31,11 @@ for i in range(0, len(symbols), chunk_size):
             stock_id = stock_dict[symbol]
             if count <= 50 and init >= 150:
                 sma_20 = tulipy.sma(np.array(recent_closes), period = 20)[-count]
+                sma_20 = round(sma_20, 2)
                 sma_50 = tulipy.sma(np.array(recent_closes), period = 50)[-count]
+                sma_50 = round(sma_50, 2)
                 rsi_14 = tulipy.rsi(np.array(recent_closes), period = 14)[-count]
+                rsi_14 = round(rsi_14, 2)
             else:
                 sma_20, sma_50, rsi_14 = None, None, None
             cursor.execute("""

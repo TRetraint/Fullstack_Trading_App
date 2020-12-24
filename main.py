@@ -34,7 +34,7 @@ def index(request: Request):
         cursor.execute("""SELECT symbol, name FROM stock ORDER BY symbol""")
     rows = cursor.fetchall()
 
-    cursor.execute("""SELECT symbol, rsi_14, sma_20, sma_50, close
+    cursor.execute("""SELECT symbol, close, rsi_14, sma_20, sma_50, close
     FROM stock join stock_price on stock_price.stock_id = stock.id
     WHERE date IN (SELECT max(date) FROM stock_price)""")
     
