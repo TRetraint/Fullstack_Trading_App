@@ -34,7 +34,34 @@
                 <tr>
                     <td>{{ stock[0] }}</td>
                     <td><a href="/stock/{{ stock[0] }}">{{ stock[1] }}</td>
-                    <td>{{ indicators[stock[0]]}}</td>
+                    <td>
+                      {% if indicators[stock[0]] %}
+                        {{ indicators[stock[0]][1] }}
+                      {% else %}
+                        None 
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if indicators[stock[0]] %}
+                        {{ indicators[stock[0]][2] }}
+                      {% else %}
+                        None 
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if indicators[stock[0]] %}
+                        {{ indicators[stock[0]][3] }}
+                      {% else %}
+                        None 
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if indicators[stock[0]] %}
+                        {{ indicators[stock[0]][4] }}
+                      {% else %}
+                        None 
+                      {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
