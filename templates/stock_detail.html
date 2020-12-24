@@ -16,7 +16,7 @@
     {
     "width": "100%",
     "height": 600,
-    "symbol": "{{stock[3]}}:{{stock[1]}}",
+    "symbol": "{% if stock[3] == 'ARCA' %}AMEX{% else %}{{stock[3]}}{% endif %}:{{stock[1]}}",
     "interval": "D",
     "timezone": "Etc/UTC",
     "theme": "dark",
