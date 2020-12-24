@@ -20,7 +20,7 @@ def index(request: Request):
             FROM stock_price JOIN stock ON stock.id = stock_price.stock_id
             GROUP BY stock_id
             ORDER BY symbol)
-            WHERE date = ?""", (date.today().isoformat(),))
+            WHERE date = (SELECT max(date) FROM stock_price)""")
 
     elif stock_filter == 'new_closing_lows':
         cursor.execute("""SELECT * FROM (
@@ -28,7 +28,7 @@ def index(request: Request):
             FROM stock_price JOIN stock ON stock.id = stock_price.stock_id
             GROUP BY stock_id
             ORDER BY symbol)
-            WHERE date = ?""", (date.today().isoformat(),))
+            WHERE date = (SELECT max(date) FROM stock_price)""")
 
     else:
         cursor.execute("""SELECT symbol, name FROM stock ORDER BY symbol""")
