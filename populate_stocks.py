@@ -17,7 +17,7 @@ assets = api.list_assets()
 for asset in assets:
     try:
         if asset.status == "active" and asset.tradable:
-            cursor.execute("INSERT INTO stock (symbol, name, exchange) VALUES (?,?,?)", (asset.symbol, asset.name, asset.exchange))
+            cursor.execute("INSERT INTO stock (symbol, name, exchange, shortable) VALUES (?,?,?,?)", (asset.symbol, asset.name, asset.exchange, asset.shortable))
     except Exception as e:
         print(asset.symbol)
         print(e)

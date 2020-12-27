@@ -16,7 +16,7 @@ messages = []
 cursor = connection.cursor()
 
 cursor.execute("""
-    SELECT id FROM strategy WHERE name = 'opening_range_breakout'
+    SELECT id FROM strategy WHERE name = 'opening_range_breakdown'
 
  """)
 
@@ -53,30 +53,30 @@ for symbol in symbols:
     after_opening_range_mask = minute_bars.index >= end_minute_bar
     after_opening_range_bars = minute_bars.loc[after_opening_range_mask]
 
-    after_opening_range_breakout = after_opening_range_bars[after_opening_range_bars['Close'] > opening_range_high]
+    after_opening_range_breakdown = after_opening_range_bars[after_opening_range_bars['Close'] < opening_range_low]
 
-    if not after_opening_range_breakout.empty:
+    if not after_opening_range_breakdown.empty:
         if symbol not in existing_order_symbols:
-            limit_price = after_opening_range_breakout.iloc[0]['Close']
-            print(f"placing order for {symbol} at {limit_price}, closed above {opening_range_high}\n\n{after_opening_range_breakout.iloc[0]}\n\n")
-            messages.append(f"placing order for {symbol} at {limit_price}, closed above {opening_range_high}\n\n{after_opening_range_breakout.iloc[0]}\n\n")
+            limit_price = after_opening_range_breakdown.iloc[0]['Close']
+            print(f"selling short {symbol} at {limit_price}, closed below {opening_range_high}\n\n{after_opening_range_breakdown.iloc[0]}\n\n")
+            messages.append(f"Selling short {symbol} at {limit_price}, closed below {opening_range_high}\n\n{after_opening_range_breakdown.iloc[0]}\n\n")
         
             api.submit_order(
                 symbol=symbol,
-                side='buy',
+                side='sell',
                 type='limit',
                 qty='100',
                 time_in_force='day',
                 order_class='bracket',
                 limit_price=limit_price,
-                take_profit=dict(limit_price = limit_price + opening_range),
-                stop_loss=dict(stop_price = limit_price - opening_range)
+                take_profit=dict(limit_price = limit_price - opening_range),
+                stop_loss=dict(stop_price = limit_price + opening_range)
             )
         else:
             print(f"Error : Already an order for {symbol}")
 
 print(messages)
-strategy = "Opening Range Breakout"
+strategy = "Opening Range Breakdown"
 email_notif.send_email(f"Trade Notifications for {current_date}",messages, strategy)
 
 
