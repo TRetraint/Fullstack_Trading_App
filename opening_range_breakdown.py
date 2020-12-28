@@ -17,7 +17,6 @@ cursor = connection.cursor()
 
 cursor.execute("""
     SELECT id FROM strategy WHERE name = 'opening_range_breakdown'
-
  """)
 
 strategy_id = cursor.fetchone()['id']
@@ -80,3 +79,4 @@ strategy = "Opening Range Breakdown"
 email_notif.send_email(f"Trade Notifications for {current_date}",messages, strategy)
 
 
+ 
