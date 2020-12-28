@@ -1,8 +1,0 @@
-sqlite3
-smtplib
-ssl
-alpaca_trade_api
-fastapi
-yfinance
-numpy
-tulipy
