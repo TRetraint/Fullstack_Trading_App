@@ -5,6 +5,7 @@ from  datetime import date,timedelta
 import yfinance as yf
 import email_notif
 from timezone import is_dst
+import risk
 
 current_date = date.today() + timedelta(days=-1)
 api = tradeapi.REST(config.API_KEY, config.SECRET_KEY, base_url=config.URL)
@@ -64,7 +65,7 @@ for symbol in symbols:
                 symbol=symbol,
                 side='sell',
                 type='limit',
-                qty='100',
+                qty=risk.calculate_quantity(limit_price,5),
                 time_in_force='day',
                 order_class='bracket',
                 limit_price=limit_price,

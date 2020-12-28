@@ -17,7 +17,6 @@ cursor = connection.cursor()
 
 cursor.execute("""
     SELECT id FROM strategy WHERE name = 'opening_range_breakout'
-
  """)
 
 strategy_id = cursor.fetchone()['id']
@@ -65,7 +64,7 @@ for symbol in symbols:
                 symbol=symbol,
                 side='buy',
                 type='limit',
-                qty='100',
+                qty=risk.calculate_quantity(limit_price,5),
                 time_in_force='day',
                 order_class='bracket',
                 limit_price=limit_price,
