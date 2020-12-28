@@ -1,73 +1,78 @@
-<html>
-    <head>
-        <title>stonks</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    </head>
-    <body>
-        <div class="ui container">
-        <h1>Stock List</h1>
-        <form method="get">
-          <select name="filter">
-            <option value="">All Stocks</option>
-            <option {% if request.query_params.filter == 'new_closing_highs' %} selected="selected"{% endif %}
-              value="new_closing_highs">New Closing Highs</option>
-            <option {% if request.query_params.filter == 'new_closing_lows' %} selected="selected"{% endif %}
-             value="new_closing_lows">New Closing Lows</option>
-          </select>
-          <input type="submit"/>
-        </form>
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Stock List</h1>
+<form method="get">
+  <select name="filter">
+    <option value="">All Stocks</option>
+    <option {% if request.query_params.filter == 'new_closing_highs' %} selected="selected"{% endif %}
+      value="new_closing_highs">New Closing Highs</option>
+    <option {% if request.query_params.filter == 'new_closing_lows' %} selected="selected"{% endif %}
+      value="new_closing_lows">New Closing Lows</option>
+      <option {% if request.query_params.filter == 'rsi_overbought' %} selected="selected"{% endif %}
+      value="rsi_overbought">RSI Overbought</option>
+      <option {% if request.query_params.filter == 'rsi_oversold' %} selected="selected"{% endif %}
+      value="rsi_oversold">RSI Oversold</option>
+      <option {% if request.query_params.filter == 'above_sma_20' %} selected="selected"{% endif %}
+      value="above_sma_20">Above SMA20</option>
+      <option {% if request.query_params.filter == 'below_sma_20' %} selected="selected"{% endif %}
+      value="below_sma_20">Below SMA20</option>
+      <option {% if request.query_params.filter == 'above_sma_50' %} selected="selected"{% endif %}
+      value="above_sma_50">Above SMA50</option>
+      <option {% if request.query_params.filter == 'below_sma_50' %} selected="selected"{% endif %}
+      value="below_sma_50">Below SMA50</option>
+  </select>
+  <input type="submit"/>
+</form>
 
 
 
-        <table class="ui inverted table">
-            <thead>
-              <tr>
-                <th>Symbol</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>RSI 14</th>
-                <th>SMA 20</th>
-                <th>SMA 50</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for stock in stocks %}
-                <tr>
-                    <td>{{ stock[0] }}</td>
-                    <td><a href="/stock/{{ stock[0] }}">{{ stock[1] }}</td>
-                    <td>
-                      {% if indicators[stock[0]] %}
-                        {{ indicators[stock[0]][1] }}
-                      {% else %}
-                        None 
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if indicators[stock[0]] %}
-                        {{ indicators[stock[0]][2] }}
-                      {% else %}
-                        None 
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if indicators[stock[0]] %}
-                        {{ indicators[stock[0]][3] }}
-                      {% else %}
-                        None 
-                      {% endif %}
-                    </td>
-                    <td>
-                      {% if indicators[stock[0]] %}
-                        {{ indicators[stock[0]][4] }}
-                      {% else %}
-                        None 
-                      {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-          </table>
-        </div>
-    </body>
-</html>
+<table class="ui inverted table">
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>RSI 14</th>
+        <th>SMA 20</th>
+        <th>SMA 50</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{ stock[0] }}</td>
+            <td><a href="/stock/{{ stock[0] }}">{{ stock[1] }}</td>
+            <td>
+              {% if indicators[stock[0]] %}
+                {{ indicators[stock[0]][1] }}
+              {% else %}
+                None 
+              {% endif %}
+            </td>
+            <td>
+              {% if indicators[stock[0]] %}
+                {{ indicators[stock[0]][2] }}
+              {% else %}
+                None 
+              {% endif %}
+            </td>
+            <td>
+              {% if indicators[stock[0]] %}
+                {{ indicators[stock[0]][3] }}
+              {% else %}
+                None 
+              {% endif %}
+            </td>
+            <td>
+              {% if indicators[stock[0]] %}
+                {{ indicators[stock[0]][4] }}
+              {% else %}
+                None 
+              {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

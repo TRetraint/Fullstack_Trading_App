@@ -1,26 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1><a href="/">Stocks </a>
-        <i class="angle double right icon"></i>
-        {{ strategy[1] }}
-    </h1>
+<h1><a href="/">Stocks </a>
+    <i class="angle double right icon"></i>
+    {{ strategy[1] }}
+</h1>
 
-    <h2>Stocks</h2>
-    <table class="ui striped table">
-        <thead>
-            <tr>
-                <th>Symbol</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for stock in stocks %}
+<h2>Stocks</h2>
+<table class="ui striped table">
+    <thead>
         <tr>
-            <td>{{ stock[0] }}</td>
-            <td>{{ stock[1] }}</td>
+            <th>Symbol</th>
+            <th>Name</th>
         </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    </thead>
+    <tbody>
+    {% for stock in stocks %}
+    <tr>
+        <td>{{ stock[0] }}</td>
+        <td>{{ stock[1] }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
