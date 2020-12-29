@@ -43,16 +43,16 @@ for symbol in symbols:
     market_open_bars = minute_bars.loc[market_open_mask]
 
     if len(market_open_bars) >= 20:
-        closes = market_open_bars.close.values
+        closes = market_open_bars.Close.values
         lower, middle, upper = tulipy.bbands(closes, 20, 2)
 
         current_candle = market_open_bars.iloc[-1]
         previous_candle = market_open_bars.iloc[-2]
 
-        if current_candle.close > lower[-1] and previous_candle < lower[-2]:
+        if current_candle.Close > lower[-1] and previous_candle.Close < lower[-2]:
             if symbol not in existing_order_symbols:
-                limit_price = current_candle.close
-                candle_range = curent_candle.high - current_candle.low
+                limit_price = current_candle.Close
+                candle_range = curent_candle.High - current_candle.Low
                 print(f"placing order for {symbol} at {limit_price}")
                 api.submit_order(
                     symbol=symbol,
@@ -63,16 +63,16 @@ for symbol in symbols:
                     order_class='bracket',
                     limit_price=limit_price,
                     take_profit=dict(limit_price = limit_price + candle_range*3),
-                    stop_loss=dict(stop_price = previous_candle.low)
+                    stop_loss=dict(stop_price = previous_candle.Low)
                 )
                 messages.append(f"placing order for {symbol} at {limit_price}")
             else:
                 print(f"Error : Already an order for {symbol}")
 
-        elif current_candle.close < upper[-1] and previous_candle > upper[-2]:
+        elif current_candle.Close < upper[-1] and previous_candle.Close > upper[-2]:
             if symbol not in existing_order_symbols:
-                limit_price = current_candle.close
-                candle_range = curent_candle.high - current_candle.low
+                limit_price = current_candle.Close
+                candle_range = curent_candle.High - current_candle.Low
                 print(f"Shorting {symbol} at {limit_price}")
                 api.submit_order(
                     symbol=symbol,
@@ -83,7 +83,7 @@ for symbol in symbols:
                     order_class='bracket',
                     limit_price=limit_price,
                     take_profit=dict(limit_price = limit_price - candle_range*3),
-                    stop_loss=dict(stop_price = previous_candle.high)
+                    stop_loss=dict(stop_price = previous_candle.High)
                 )
                 messages.append(f"Shorting {symbol} at {limit_price}")
             else:
