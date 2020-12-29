@@ -8,4 +8,6 @@ EMAIL_PASSWORD = "xxx"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 465
 
+BUYING_POWER = 300000
+
 
